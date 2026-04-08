@@ -14,6 +14,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { B2BPagesSettingsSection } from "@/features/config/components/b2b-pages-settings-section";
 import { MaintenanceSection } from "@/features/config/components/maintenance-section";
 import { SectionSkeleton } from "@/features/config/components/settings-skeleton";
 import { SiteSettingsSection } from "@/features/config/components/site-settings-section";
@@ -225,6 +226,7 @@ function RouteComponent() {
                 </p>
               </div>
               <SiteSettingsSection />
+              <B2BPagesSettingsSection />
             </TabsContent>
 
             <TabsContent value="integrations" className="mt-0 space-y-10">
