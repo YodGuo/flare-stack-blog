@@ -7,6 +7,7 @@ import {
   Link2,
   LogOut,
   MessageSquare,
+  Package,
   Tag,
   User,
   X,
@@ -77,6 +78,12 @@ export function SideBar({
       path: "/admin/posts",
       icon: FileText,
       label: m.admin_sidebar_posts(),
+      exact: false,
+    },
+    {
+      path: "/admin/products",
+      icon: Package,
+      label: "Products",
       exact: false,
     },
     {
