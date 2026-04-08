@@ -175,108 +175,11 @@ Flare Stack Blog 的所有面向用户的页面与布局均通过 **主题契约
 
 ### Cloudflare 一键部署（参考 EmDash）
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/du2333/flare-stack-blog)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/YodGuo/flare-stack-blog)
 
 点击按钮后，Cloudflare 会引导你创建 Worker 并连接此仓库。完成后请继续在 Cloudflare Dashboard 中补齐：
 
-1. D1 / KV / R2 / Queue / Durable Objects 等绑定资源。
-2. `wrangler.example.jsonc` 中对应的资源 ID（建议复制为 `wrangler.jsonc` 并替换占位符）。
-3. 项目所需环境变量（见下方“环境变量参考”）。
-4. 首次部署后执行数据库迁移（`bun db:migrate` 或 CI 中等价流程）。
-
-> 说明：本项目依赖多个 Cloudflare 资源，一键部署可完成“仓库接入 + Worker 创建”，但仍需要按上述步骤完成资源绑定与变量配置。
-
-**[视频教程](https://www.bilibili.com/video/BV1R4fnBhEs4?p=2)** 已上线
-
----
-
-## 环境变量参考
-
-| 文件        | 用途                                   |
-| :---------- | :------------------------------------- |
-| `.env`      | 客户端变量（`VITE_*`），Vite 读取      |
-| `.dev.vars` | 服务端变量，Wrangler 注入 Worker `env` |
-
-### 必填
-
-| 变量名                       | 用途   | 说明                                              |
-| :--------------------------- | :----- | :------------------------------------------------ |
-| `CLOUDFLARE_API_TOKEN`       | CI/CD  | Cloudflare API Token（Worker 部署 + D1 读写权限） |
-| `CLOUDFLARE_ACCOUNT_ID`      | CI/CD  | Cloudflare Account ID                             |
-| `D1_DATABASE_ID`             | CI/CD  | D1 数据库 ID                                      |
-| `KV_NAMESPACE_ID`            | CI/CD  | KV 命名空间 ID                                    |
-| `BUCKET_NAME`                | CI/CD  | R2 存储桶名称                                     |
-| `BETTER_AUTH_SECRET`         | 运行时 | 会话加密密钥，运行 `openssl rand -hex 32` 生成    |
-| `BETTER_AUTH_URL`            | 运行时 | 应用 URL（如 `https://blog.example.com`）         |
-| `ADMIN_EMAIL`                | 运行时 | 管理员邮箱                                        |
-| `GITHUB_CLIENT_ID`           | 运行时 | GitHub OAuth Client ID                            |
-| `GITHUB_CLIENT_SECRET`       | 运行时 | GitHub OAuth Client Secret                        |
-| `CLOUDFLARE_ZONE_ID`         | 运行时 | Cloudflare Zone ID                                |
-| `CLOUDFLARE_PURGE_API_TOKEN` | 运行时 | 具有 Purge CDN 权限的 API Token                   |
-| `DOMAIN`                     | 运行时 | 博客域名（如 `blog.example.com`）                 |
-
-### 可选
-
-| 变量名                    | 用途   | 说明                                                                                                      |
-| :------------------------ | :----- | :-------------------------------------------------------------------------------------------------------- |
-| `THEME`                   | 构建时 | 主题名称，默认 `default`，详见 [可用主题](#可用主题)                                                      |
-| `TURNSTILE_SECRET_KEY`    | 运行时 | Cloudflare Turnstile 人机验证 Secret Key                                                                  |
-| `VITE_TURNSTILE_SITE_KEY` | 构建时 | Cloudflare Turnstile Site Key                                                                             |
-| `GITHUB_TOKEN`            | 运行时 | GitHub API Token（版本更新检查，避免限流）                                                                |
-| `LOCALE`                  | 运行时 | 默认语言，支持 `zh` / `en`，默认 `zh`；通知邮件、Webhook 文本和后台异步任务文案会使用该语言               |
-| `CDN_DOMAIN`              | 运行时 | 独立 CDN 域名（如 `cdn.example.com`），purge 时优先使用；须为当前 Zone 下通过 SaaS CNAME 接入的自定义域名 |
-| `ROUTE`                   | CI/CD  | 设为 `1` 时，GitHub Actions 部署自动改用 Cloudflare `routes` 模式                                        |
-| `ZONE_NAME`               | CI/CD  | 可选。仅在 `ROUTE=1` 且 Zone 不是从 `DOMAIN` 自动推导结果时填写                                           |
-| `PAGEVIEW_SALT`           | 运行时 | 浏览量统计的访客匿名化 salt，运行 `openssl rand -hex 16` 生成                                             |
-| `UMAMI_SRC`               | 运行时 | Umami 客户端埋点代理 URL（如 `https://cloud.umami.is`）                                                   |
-| `VITE_UMAMI_WEBSITE_ID`   | 构建时 | Umami Website ID（客户端埋点）                                                                            |
-
----
-
-## 本地开发
-
-### 前置要求
-
-- [Bun](https://bun.sh) >= 1.3
-- Cloudflare 账号（用于远程 D1/R2/KV 资源）
-
-### 快速开始
-
-```bash
-# 安装依赖
-bun install
-
-# 配置环境变量
-cp .env.example .env        # 客户端变量
-cp .dev.vars.example .dev.vars  # 服务端变量
-
-# 配置 Wrangler
-cp wrangler.example.jsonc wrangler.jsonc
-# 编辑 wrangler.jsonc，填入你的资源 ID
-# 默认示例使用 custom_domain，也可以改成 routes 模式（如 blog.example.com/*）
-
-# 启动开发服务器
-bun dev
-```
-
-### 登录管理后台
-
-**方式一：邮箱密码注册（无需第三方服务）**
-
-1. 访问 `http://localhost:3000` 注册页面，使用 `.dev.vars` 中配置的 `ADMIN_EMAIL` 注册账号
-2. 开发环境下验证邮件不会真正发送，验证链接会打印到控制台，复制访问即可完成验证
-3. 验证后自动登录，系统根据 `ADMIN_EMAIL` 自动赋予管理员权限
-
-**方式二：GitHub OAuth**
-
-1. 前往 [GitHub Developer Settings](https://github.com/settings/developers) 创建一个 OAuth App
-2. Homepage URL 填 `http://localhost:3000`，Authorization callback URL 填 `http://localhost:3000/api/auth/callback/github`
-3. 将 Client ID 和 Client Secret 填入 `.dev.vars`
-
-### 常用命令
-
-| 命令            | 说明                        |
-| :-------------- | :-------------------------- |
+-------- | :-------------------------- |
 | `bun dev`       | 启动开发服务器（端口 3000） |
 | `bun run build` | 构建生产版本                |
 | `bun run test`  | 运行测试                    |
@@ -332,7 +235,7 @@ bun dev
 }
 ```
 
-使用仓库内置 GitHub Actions 部署时，不必手改 `wrangler.example.jsonc`：
+使用仓库内置 GitHub Actions 部署时，不必手改 `wrangler.jsonc`：
 
 - 默认：`custom_domain`
 - 设置仓库变量 `ROUTE=1`：自动切到 `routes`

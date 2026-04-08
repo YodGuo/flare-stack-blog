@@ -169,7 +169,24 @@ Request → Cloudflare CDN (Edge Cache)
 
 ## Deployment Guide
 
-Please refer to the **[Flare Stack Blog Deployment Guide](./deployment-guide.en.md)** for comprehensive structural steps, addressing Cloudflare resource orchestration, credentials procurement, GitHub OAuth configurations, and detailed visual and written setups for both automated deployment approaches along with troubleshooting.
+You can deploy with either approach below:
+
+### Option A: One-click Deploy (EmDash-style)
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/du2333/flare-stack-blog)
+
+After clicking the button, Cloudflare will scaffold the Worker project and connect this repository. Then complete these steps in Cloudflare Dashboard:
+
+1. Bind D1 / KV / R2 / Queue / Durable Objects resources.
+2. Replace placeholder resource IDs in `wrangler.jsonc`.
+3. Configure runtime/build environment variables (see **Environment Variables Reference** below).
+4. Run the initial migration (`bun db:migrate` or equivalent CI step).
+
+> One-click deploy handles repository onboarding + Worker creation only. Cloudflare resources and bindings are still configured manually.
+
+### Option B: Manual deployment guide
+
+Please refer to the **[Flare Stack Blog Deployment Guide](./deployment-guide.en.md)** for a full step-by-step guide, including Cloudflare resources, credentials, GitHub OAuth setup, and troubleshooting.
 
 ### One-click Deploy to Cloudflare (EmDash-style)
 
@@ -244,8 +261,7 @@ bun install
 cp .env.example .env            # Client-side variables
 cp .dev.vars.example .dev.vars  # Server-side variables
 
-# Configure Wrangler
-cp wrangler.example.jsonc wrangler.jsonc
+# Configure Wrangler (template already included in repository)
 # Edit wrangler.jsonc to insert your Cloudflare resource IDs
 
 # Start development server
