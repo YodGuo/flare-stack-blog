@@ -173,6 +173,19 @@ Flare Stack Blog 的所有面向用户的页面与布局均通过 **主题契约
 
 请参考 **[Flare Stack Blog 部署教程](https://blog.dukda.com/post/flare-stack-blog%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B)**，包含 Cloudflare 资源创建、凭证获取、GitHub OAuth 配置、两种部署方式的详细图文步骤及常见问题排查。
 
+### Cloudflare 一键部署（参考 EmDash）
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/du2333/flare-stack-blog)
+
+点击按钮后，Cloudflare 会引导你创建 Worker 并连接此仓库。完成后请继续在 Cloudflare Dashboard 中补齐：
+
+1. D1 / KV / R2 / Queue / Durable Objects 等绑定资源。
+2. `wrangler.example.jsonc` 中对应的资源 ID（建议复制为 `wrangler.jsonc` 并替换占位符）。
+3. 项目所需环境变量（见下方“环境变量参考”）。
+4. 首次部署后执行数据库迁移（`bun db:migrate` 或 CI 中等价流程）。
+
+> 说明：本项目依赖多个 Cloudflare 资源，一键部署可完成“仓库接入 + Worker 创建”，但仍需要按上述步骤完成资源绑定与变量配置。
+
 **[视频教程](https://www.bilibili.com/video/BV1R4fnBhEs4?p=2)** 已上线
 
 ---
