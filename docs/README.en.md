@@ -188,6 +188,19 @@ After clicking the button, Cloudflare will scaffold the Worker project and conne
 
 Please refer to the **[Flare Stack Blog Deployment Guide](./deployment-guide.en.md)** for a full step-by-step guide, including Cloudflare resources, credentials, GitHub OAuth setup, and troubleshooting.
 
+### One-click Deploy to Cloudflare (EmDash-style)
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/du2333/flare-stack-blog)
+
+After clicking the button, Cloudflare will scaffold the Worker project and connect this repository. Then complete the remaining setup in Cloudflare Dashboard:
+
+1. Bind D1 / KV / R2 / Queue / Durable Objects resources.
+2. Fill resource IDs in `wrangler.example.jsonc` (recommended: copy to `wrangler.jsonc` and replace placeholders).
+3. Configure runtime/build environment variables (see **Environment Variables Reference** below).
+4. Run the initial database migration (`bun db:migrate` or equivalent CI step).
+
+> Note: one-click deploy covers repository onboarding + Worker creation. This project still requires manual Cloudflare resource bindings and environment configuration.
+
 ---
 
 ## Environment Variables Reference
