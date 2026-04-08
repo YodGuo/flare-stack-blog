@@ -8,6 +8,7 @@ import { siteDomainQuery, systemConfigQuery } from "@/features/config/queries";
 import { postsInfiniteQueryOptions } from "@/features/posts/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 const NEWS_LIMIT = 12;
 const NEWS_TAG = "新闻";
@@ -23,10 +24,10 @@ export const Route = createFileRoute("/_public/news")({
     ]);
 
     return {
-      title: `${config.b2bPages?.newsTitle ?? "新闻中心"}｜行业动态与公司内容`,
+      title: `${config.b2bPages?.newsTitle ?? m.b2b_news_title()}｜B2B`,
       description: config.b2bPages?.newsDescription
         ? config.b2bPages.newsDescription
-        : "查看最新行业动态、公司新闻与实战内容。",
+        : m.b2b_news_description(),
       canonicalHref: buildCanonicalUrl(domain, "/news"),
     };
   },
@@ -55,11 +56,10 @@ function NewsPage() {
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10 md:py-12">
       <h1 className="text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl dark:text-zinc-100">
-        {pageCopy?.newsTitle || "新闻中心"}
+        {pageCopy?.newsTitle || m.b2b_news_title()}
       </h1>
       <p className="mt-3 text-zinc-600 dark:text-zinc-300">
-        {pageCopy?.newsDescription ||
-          "这里汇总了最近发布的行业洞察与产品内容。"}
+        {pageCopy?.newsDescription || m.b2b_news_description()}
       </p>
 
       <section className="mt-8 space-y-4">
@@ -83,7 +83,7 @@ function NewsPage() {
         ))}
         {posts.length === 0 ? (
           <p className="rounded-xl border border-dashed border-zinc-300 px-4 py-5 text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-            暂无已发布新闻。请在后台发布文章并添加“新闻”标签后展示在这里。
+            {m.b2b_news_empty()}
           </p>
         ) : null}
       </section>
@@ -96,7 +96,9 @@ function NewsPage() {
             disabled={isFetchingNextPage}
             className="rounded-full border border-zinc-300 px-5 py-2 text-sm text-zinc-700 hover:border-zinc-500 dark:border-zinc-700 dark:text-zinc-200"
           >
-            {isFetchingNextPage ? "加载中..." : "加载更多新闻"}
+            {isFetchingNextPage
+              ? m.b2b_common_loading()
+              : m.b2b_news_load_more()}
           </button>
         </div>
       ) : null}

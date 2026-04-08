@@ -35,9 +35,9 @@ function PublicLayout() {
 
   const navOptions = [
     { label: m.nav_home(), to: "/" as const, id: "home" },
-    { label: "产品", to: "/products" as const, id: "products" },
-    { label: "新闻", to: "/news" as const, id: "news" },
-    { label: "关于", to: "/about" as const, id: "about" },
+    { label: m.nav_products(), to: "/products" as const, id: "products" },
+    { label: m.nav_news(), to: "/news" as const, id: "news" },
+    { label: m.nav_about(), to: "/about" as const, id: "about" },
   ];
 
   const logout = async () => {
