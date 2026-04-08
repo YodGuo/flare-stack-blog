@@ -1,18 +1,25 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { siteDomainQuery, systemConfigQuery } from "@/features/config/queries";
-import { recentPostsQuery } from "@/features/posts/queries";
+import { postsInfiniteQueryOptions } from "@/features/posts/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 
 const NEWS_LIMIT = 12;
+const NEWS_TAG = "新闻";
 
 export const Route = createFileRoute("/_public/news")({
   loader: async ({ context }) => {
     const [domain, config] = await Promise.all([
       context.queryClient.ensureQueryData(siteDomainQuery),
       context.queryClient.ensureQueryData(systemConfigQuery),
-      context.queryClient.ensureQueryData(recentPostsQuery(NEWS_LIMIT)),
+      context.queryClient.prefetchInfiniteQuery(
+        postsInfiniteQueryOptions({ tagName: NEWS_TAG, limit: NEWS_LIMIT }),
+      ),
     ]);
 
     return {
@@ -34,9 +41,16 @@ export const Route = createFileRoute("/_public/news")({
 });
 
 function NewsPage() {
-  const { data: posts } = useSuspenseQuery(recentPostsQuery(NEWS_LIMIT));
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(
+      postsInfiniteQueryOptions({ tagName: NEWS_TAG, limit: NEWS_LIMIT }),
+    );
   const { data: config } = useSuspenseQuery(systemConfigQuery);
   const pageCopy = config.b2bPages;
+  const posts = useMemo(
+    () => data.pages.flatMap((page) => page.items),
+    [data.pages],
+  );
 
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10 md:py-12">
@@ -67,7 +81,25 @@ function NewsPage() {
             </p>
           </article>
         ))}
+        {posts.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-zinc-300 px-4 py-5 text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+            暂无已发布新闻。请在后台发布文章并添加“新闻”标签后展示在这里。
+          </p>
+        ) : null}
       </section>
+
+      {hasNextPage ? (
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="rounded-full border border-zinc-300 px-5 py-2 text-sm text-zinc-700 hover:border-zinc-500 dark:border-zinc-700 dark:text-zinc-200"
+          >
+            {isFetchingNextPage ? "加载中..." : "加载更多新闻"}
+          </button>
+        </div>
+      ) : null}
     </main>
   );
 }
