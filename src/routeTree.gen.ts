@@ -34,6 +34,7 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-pa
 import { Route as AdminPostsRouteRouteImport } from './routes/admin/posts/route'
 import { Route as AdminTagsIndexRouteImport } from './routes/admin/tags/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
+import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminPostsIndexRouteImport } from './routes/admin/posts/index'
 import { Route as AdminMediaIndexRouteImport } from './routes/admin/media/index'
 import { Route as AdminFriendLinksIndexRouteImport } from './routes/admin/friend-links/index'
@@ -163,6 +164,11 @@ const AdminSettingsIndexRoute = AdminSettingsIndexRouteImport.update({
   path: '/settings/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminPostsIndexRoute = AdminPostsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/admin/friend-links/': typeof AdminFriendLinksIndexRoute
   '/admin/media/': typeof AdminMediaIndexRoute
   '/admin/posts/': typeof AdminPostsIndexRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/tags/': typeof AdminTagsIndexRoute
   '/admin/posts/edit/$id': typeof AdminPostsEditIdRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/admin/friend-links': typeof AdminFriendLinksIndexRoute
   '/admin/media': typeof AdminMediaIndexRoute
   '/admin/posts': typeof AdminPostsIndexRoute
+  '/admin/products': typeof AdminProductsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/tags': typeof AdminTagsIndexRoute
   '/admin/posts/edit/$id': typeof AdminPostsEditIdRoute
@@ -282,6 +290,7 @@ export interface FileRoutesById {
   '/admin/friend-links/': typeof AdminFriendLinksIndexRoute
   '/admin/media/': typeof AdminMediaIndexRoute
   '/admin/posts/': typeof AdminPostsIndexRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/tags/': typeof AdminTagsIndexRoute
   '/admin/posts/edit/$id': typeof AdminPostsEditIdRoute
@@ -314,6 +323,7 @@ export interface FileRouteTypes {
     | '/admin/friend-links/'
     | '/admin/media/'
     | '/admin/posts/'
+    | '/admin/products/'
     | '/admin/settings/'
     | '/admin/tags/'
     | '/admin/posts/edit/$id'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/admin/friend-links'
     | '/admin/media'
     | '/admin/posts'
+    | '/admin/products'
     | '/admin/settings'
     | '/admin/tags'
     | '/admin/posts/edit/$id'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/admin/friend-links/'
     | '/admin/media/'
     | '/admin/posts/'
+    | '/admin/products/'
     | '/admin/settings/'
     | '/admin/tags/'
     | '/admin/posts/edit/$id'
@@ -565,6 +577,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/products/': {
+      id: '/admin/products/'
+      path: '/products'
+      fullPath: '/admin/products/'
+      preLoaderRoute: typeof AdminProductsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/posts/': {
       id: '/admin/posts/'
       path: '/'
@@ -694,6 +713,7 @@ interface AdminRouteRouteChildren {
   AdminCommentsIndexRoute: typeof AdminCommentsIndexRoute
   AdminFriendLinksIndexRoute: typeof AdminFriendLinksIndexRoute
   AdminMediaIndexRoute: typeof AdminMediaIndexRoute
+  AdminProductsIndexRoute: typeof AdminProductsIndexRoute
   AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
   AdminTagsIndexRoute: typeof AdminTagsIndexRoute
 }
@@ -704,6 +724,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminCommentsIndexRoute: AdminCommentsIndexRoute,
   AdminFriendLinksIndexRoute: AdminFriendLinksIndexRoute,
   AdminMediaIndexRoute: AdminMediaIndexRoute,
+  AdminProductsIndexRoute: AdminProductsIndexRoute,
   AdminSettingsIndexRoute: AdminSettingsIndexRoute,
   AdminTagsIndexRoute: AdminTagsIndexRoute,
 }
