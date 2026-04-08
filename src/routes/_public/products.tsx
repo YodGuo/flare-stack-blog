@@ -1,5 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { siteDomainQuery } from "@/features/config/queries";
+import { siteDomainQuery, systemConfigQuery } from "@/features/config/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 
 const productMatrix = [
@@ -24,12 +25,16 @@ const productMatrix = [
 
 export const Route = createFileRoute("/_public/products")({
   loader: async ({ context }) => {
-    const domain = await context.queryClient.ensureQueryData(siteDomainQuery);
+    const [domain, config] = await Promise.all([
+      context.queryClient.ensureQueryData(siteDomainQuery),
+      context.queryClient.ensureQueryData(systemConfigQuery),
+    ]);
 
     return {
-      title: "产品中心｜B2B 独立站能力",
-      description:
-        "查看 B2B 独立站产品能力：官网、内容营销、询盘转化与数据增长。",
+      title: `${config.b2bPages?.productsTitle ?? "产品中心"}｜B2B 独立站能力`,
+      description: config.b2bPages?.productsDescription
+        ? config.b2bPages.productsDescription
+        : "查看 B2B 独立站产品能力：官网、内容营销、询盘转化与数据增长。",
       canonicalHref: buildCanonicalUrl(domain, "/products"),
     };
   },
@@ -44,14 +49,17 @@ export const Route = createFileRoute("/_public/products")({
 });
 
 function ProductsPage() {
+  const { data: config } = useSuspenseQuery(systemConfigQuery);
+  const pageCopy = config.b2bPages;
+
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-8 md:px-10 md:py-12">
       <h1 className="text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl dark:text-zinc-100">
-        产品中心
+        {pageCopy?.productsTitle || "产品中心"}
       </h1>
       <p className="mt-3 max-w-3xl text-zinc-600 dark:text-zinc-300">
-        基于当前项目可快速交付以下 B2B
-        独立站能力模块，你可以按业务阶段逐步启用。
+        {pageCopy?.productsDescription ||
+          "基于当前项目可快速交付以下 B2B 独立站能力模块，你可以按业务阶段逐步启用。"}
       </p>
 
       <section className="mt-8 grid gap-4 md:grid-cols-3">

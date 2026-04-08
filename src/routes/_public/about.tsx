@@ -1,5 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { siteDomainQuery } from "@/features/config/queries";
+import { siteDomainQuery, systemConfigQuery } from "@/features/config/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 
 const values = [
@@ -10,11 +11,16 @@ const values = [
 
 export const Route = createFileRoute("/_public/about")({
   loader: async ({ context }) => {
-    const domain = await context.queryClient.ensureQueryData(siteDomainQuery);
+    const [domain, config] = await Promise.all([
+      context.queryClient.ensureQueryData(siteDomainQuery),
+      context.queryClient.ensureQueryData(systemConfigQuery),
+    ]);
 
     return {
-      title: "关于我们｜B2B 增长团队",
-      description: "了解我们的 B2B 独立站方法论与交付原则。",
+      title: `${config.b2bPages?.aboutTitle ?? "关于我们"}｜B2B 增长团队`,
+      description: config.b2bPages?.aboutDescription
+        ? config.b2bPages.aboutDescription
+        : "了解我们的 B2B 独立站方法论与交付原则。",
       canonicalHref: buildCanonicalUrl(domain, "/about"),
     };
   },
@@ -29,14 +35,17 @@ export const Route = createFileRoute("/_public/about")({
 });
 
 function AboutPage() {
+  const { data: config } = useSuspenseQuery(systemConfigQuery);
+  const pageCopy = config.b2bPages;
+
   return (
     <main className="mx-auto w-full max-w-4xl px-6 py-8 md:px-10 md:py-12">
       <h1 className="text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl dark:text-zinc-100">
-        关于我们
+        {pageCopy?.aboutTitle || "关于我们"}
       </h1>
       <p className="mt-4 leading-7 text-zinc-600 dark:text-zinc-300">
-        我们专注于帮助制造业、软件与专业服务企业搭建 B2B 独立站，
-        让官网从“线上名片”进化为“增长资产”。
+        {pageCopy?.aboutDescription ||
+          "我们专注于帮助制造业、软件与专业服务企业搭建 B2B 独立站，让官网从“线上名片”进化为“增长资产”。"}
       </p>
 
       <section className="mt-8 space-y-3">

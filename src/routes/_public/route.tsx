@@ -38,11 +38,6 @@ function PublicLayout() {
     { label: "产品", to: "/products" as const, id: "products" },
     { label: "新闻", to: "/news" as const, id: "news" },
     { label: "关于", to: "/about" as const, id: "about" },
-    {
-      label: m.nav_friend_links(),
-      to: "/friend-links" as const,
-      id: "friend-links",
-    },
   ];
 
   const logout = async () => {

@@ -1,5 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { siteDomainQuery } from "@/features/config/queries";
+import { siteDomainQuery, systemConfigQuery } from "@/features/config/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 
 const coreCapabilities = [
@@ -57,13 +58,17 @@ const implementationSteps = [
 
 export const Route = createFileRoute("/_public/")({
   loader: async ({ context }) => {
-    const domain = await context.queryClient.ensureQueryData(siteDomainQuery);
+    const [domain, config] = await Promise.all([
+      context.queryClient.ensureQueryData(siteDomainQuery),
+      context.queryClient.ensureQueryData(systemConfigQuery),
+    ]);
 
     return {
       canonicalHref: buildCanonicalUrl(domain, "/"),
-      title: "B2B 独立站解决方案｜增长型企业官网",
-      description:
-        "基于 Flare Stack Blog 快速构建 B2B 独立站，集成品牌展示、内容营销、线索收集与数据分析能力。",
+      title: `${config.b2bPages?.homeTitle ?? "B2B 独立站解决方案"}｜增长型企业官网`,
+      description: config.b2bPages?.homeDescription
+        ? config.b2bPages.homeDescription
+        : "基于 Flare Stack Blog 快速构建 B2B 独立站，集成品牌展示、内容营销、线索收集与数据分析能力。",
     };
   },
   head: ({ loaderData }) => ({
@@ -82,6 +87,9 @@ export const Route = createFileRoute("/_public/")({
 });
 
 function B2BHomePage() {
+  const { data: config } = useSuspenseQuery(systemConfigQuery);
+  const pageCopy = config.b2bPages;
+
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-8 md:gap-12 md:px-10 md:py-12">
       <section className="rounded-3xl border border-zinc-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-8 shadow-sm dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900">
@@ -89,11 +97,11 @@ function B2BHomePage() {
           Flare Stack B2B Site
         </p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight text-zinc-900 md:text-5xl dark:text-zinc-100">
-          帮你搭建可持续获客的 B2B 独立站
+          {pageCopy?.homeTitle || "帮你搭建可持续获客的 B2B 独立站"}
         </h1>
         <p className="mt-4 max-w-3xl text-base leading-7 text-zinc-600 md:text-lg dark:text-zinc-300">
-          这个站点已从博客首页升级为 B2B
-          增长门户：你可以用它做品牌展示、发布行业内容、获取高质量询盘，并通过数据看板持续优化转化。
+          {pageCopy?.homeDescription ||
+            "这个站点已从博客首页升级为 B2B 增长门户：你可以用它做品牌展示、发布行业内容、获取高质量询盘，并通过数据看板持续优化转化。"}
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Link

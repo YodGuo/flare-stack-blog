@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { siteDomainQuery } from "@/features/config/queries";
+import { siteDomainQuery, systemConfigQuery } from "@/features/config/queries";
 import { recentPostsQuery } from "@/features/posts/queries";
 import { buildCanonicalUrl, canonicalLink } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
@@ -9,14 +9,17 @@ const NEWS_LIMIT = 12;
 
 export const Route = createFileRoute("/_public/news")({
   loader: async ({ context }) => {
-    const [domain] = await Promise.all([
+    const [domain, config] = await Promise.all([
       context.queryClient.ensureQueryData(siteDomainQuery),
+      context.queryClient.ensureQueryData(systemConfigQuery),
       context.queryClient.ensureQueryData(recentPostsQuery(NEWS_LIMIT)),
     ]);
 
     return {
-      title: "新闻中心｜行业动态与公司内容",
-      description: "查看最新行业动态、公司新闻与实战内容。",
+      title: `${config.b2bPages?.newsTitle ?? "新闻中心"}｜行业动态与公司内容`,
+      description: config.b2bPages?.newsDescription
+        ? config.b2bPages.newsDescription
+        : "查看最新行业动态、公司新闻与实战内容。",
       canonicalHref: buildCanonicalUrl(domain, "/news"),
     };
   },
@@ -32,14 +35,17 @@ export const Route = createFileRoute("/_public/news")({
 
 function NewsPage() {
   const { data: posts } = useSuspenseQuery(recentPostsQuery(NEWS_LIMIT));
+  const { data: config } = useSuspenseQuery(systemConfigQuery);
+  const pageCopy = config.b2bPages;
 
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10 md:py-12">
       <h1 className="text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl dark:text-zinc-100">
-        新闻中心
+        {pageCopy?.newsTitle || "新闻中心"}
       </h1>
       <p className="mt-3 text-zinc-600 dark:text-zinc-300">
-        这里汇总了最近发布的行业洞察与产品内容。
+        {pageCopy?.newsDescription ||
+          "这里汇总了最近发布的行业洞察与产品内容。"}
       </p>
 
       <section className="mt-8 space-y-4">

@@ -116,9 +116,19 @@ export async function buildSitemapXml(env: Env) {
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://${env.DOMAIN}/friend-links</loc>
+    <loc>https://${env.DOMAIN}/products</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://${env.DOMAIN}/news</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://${env.DOMAIN}/about</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   ${posts
     .map((post) => {
