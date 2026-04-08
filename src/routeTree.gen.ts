@@ -23,6 +23,7 @@ import { Route as PublicSearchRouteImport } from './routes/_public/search'
 import { Route as PublicProductsRouteImport } from './routes/_public/products'
 import { Route as PublicPostsRouteImport } from './routes/_public/posts'
 import { Route as PublicNewsRouteImport } from './routes/_public/news'
+import { Route as PublicInquiryRouteImport } from './routes/_public/inquiry'
 import { Route as PublicFriendLinksRouteImport } from './routes/_public/friend-links'
 import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AuthVerifyEmailRouteImport } from './routes/_auth/verify-email'
@@ -105,6 +106,11 @@ const PublicPostsRoute = PublicPostsRouteImport.update({
 const PublicNewsRoute = PublicNewsRouteImport.update({
   id: '/news',
   path: '/news',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicInquiryRoute = PublicInquiryRouteImport.update({
+  id: '/inquiry',
+  path: '/inquiry',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicFriendLinksRoute = PublicFriendLinksRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof AuthVerifyEmailRoute
   '/about': typeof PublicAboutRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/inquiry': typeof PublicInquiryRoute
   '/news': typeof PublicNewsRoute
   '/posts': typeof PublicPostsRoute
   '/products': typeof PublicProductsRoute
@@ -226,6 +233,7 @@ export interface FileRoutesByTo {
   '/verify-email': typeof AuthVerifyEmailRoute
   '/about': typeof PublicAboutRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/inquiry': typeof PublicInquiryRoute
   '/news': typeof PublicNewsRoute
   '/posts': typeof PublicPostsRoute
   '/products': typeof PublicProductsRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/_auth/verify-email': typeof AuthVerifyEmailRoute
   '/_public/about': typeof PublicAboutRoute
   '/_public/friend-links': typeof PublicFriendLinksRoute
+  '/_public/inquiry': typeof PublicInquiryRoute
   '/_public/news': typeof PublicNewsRoute
   '/_public/posts': typeof PublicPostsRoute
   '/_public/products': typeof PublicProductsRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/about'
     | '/friend-links'
+    | '/inquiry'
     | '/news'
     | '/posts'
     | '/products'
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/about'
     | '/friend-links'
+    | '/inquiry'
     | '/news'
     | '/posts'
     | '/products'
@@ -348,6 +359,7 @@ export interface FileRouteTypes {
     | '/_auth/verify-email'
     | '/_public/about'
     | '/_public/friend-links'
+    | '/_public/inquiry'
     | '/_public/news'
     | '/_public/posts'
     | '/_public/products'
@@ -474,6 +486,13 @@ declare module '@tanstack/react-router' {
       path: '/news'
       fullPath: '/news'
       preLoaderRoute: typeof PublicNewsRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/inquiry': {
+      id: '/_public/inquiry'
+      path: '/inquiry'
+      fullPath: '/inquiry'
+      preLoaderRoute: typeof PublicInquiryRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_public/friend-links': {
@@ -614,6 +633,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 interface PublicRouteRouteChildren {
   PublicAboutRoute: typeof PublicAboutRoute
   PublicFriendLinksRoute: typeof PublicFriendLinksRoute
+  PublicInquiryRoute: typeof PublicInquiryRoute
   PublicNewsRoute: typeof PublicNewsRoute
   PublicPostsRoute: typeof PublicPostsRoute
   PublicProductsRoute: typeof PublicProductsRoute
@@ -626,6 +646,7 @@ interface PublicRouteRouteChildren {
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicAboutRoute: PublicAboutRoute,
   PublicFriendLinksRoute: PublicFriendLinksRoute,
+  PublicInquiryRoute: PublicInquiryRoute,
   PublicNewsRoute: PublicNewsRoute,
   PublicPostsRoute: PublicPostsRoute,
   PublicProductsRoute: PublicProductsRoute,

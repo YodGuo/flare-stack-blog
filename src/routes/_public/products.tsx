@@ -85,6 +85,15 @@ function ProductsPage() {
             <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
               {product.description}
             </p>
+            <div className="mt-3">
+              <Link
+                to="/inquiry"
+                search={{ product: product.title }}
+                className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+              >
+                立即询价
+              </Link>
+            </div>
           </article>
         ))}
         {products.length === 0 ? (

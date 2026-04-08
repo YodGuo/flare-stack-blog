@@ -38,6 +38,7 @@ function PublicLayout() {
     { label: m.nav_products(), to: "/products" as const, id: "products" },
     { label: m.nav_news(), to: "/news" as const, id: "news" },
     { label: m.nav_about(), to: "/about" as const, id: "about" },
+    { label: "询价", to: "/inquiry" as const, id: "inquiry" },
   ];
 
   const logout = async () => {
