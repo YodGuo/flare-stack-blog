@@ -250,8 +250,7 @@ bun install
 cp .env.example .env        # 客户端变量
 cp .dev.vars.example .dev.vars  # 服务端变量
 
-# 配置 Wrangler
-cp wrangler.example.jsonc wrangler.jsonc
+# 配置 Wrangler（仓库已包含模板）
 # 编辑 wrangler.jsonc，填入你的资源 ID
 # 默认示例使用 custom_domain，也可以改成 routes 模式（如 blog.example.com/*）
 
@@ -332,7 +331,7 @@ bun dev
 }
 ```
 
-使用仓库内置 GitHub Actions 部署时，不必手改 `wrangler.example.jsonc`：
+使用仓库内置 GitHub Actions 部署时，不必手改 `wrangler.jsonc`：
 
 - 默认：`custom_domain`
 - 设置仓库变量 `ROUTE=1`：自动切到 `routes`

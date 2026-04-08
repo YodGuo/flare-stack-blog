@@ -248,8 +248,7 @@ bun install
 cp .env.example .env            # Client-side variables
 cp .dev.vars.example .dev.vars  # Server-side variables
 
-# Configure Wrangler
-cp wrangler.example.jsonc wrangler.jsonc
+# Configure Wrangler (template already included in repository)
 # Edit wrangler.jsonc to insert your Cloudflare resource IDs
 
 # Start development server
