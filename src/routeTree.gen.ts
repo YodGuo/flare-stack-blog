@@ -20,8 +20,11 @@ import { Route as UserSubmitFriendLinkRouteImport } from './routes/_user/submit-
 import { Route as UserProfileRouteImport } from './routes/_user/profile'
 import { Route as PublicUnsubscribeRouteImport } from './routes/_public/unsubscribe'
 import { Route as PublicSearchRouteImport } from './routes/_public/search'
+import { Route as PublicProductsRouteImport } from './routes/_public/products'
 import { Route as PublicPostsRouteImport } from './routes/_public/posts'
+import { Route as PublicNewsRouteImport } from './routes/_public/news'
 import { Route as PublicFriendLinksRouteImport } from './routes/_public/friend-links'
+import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AuthVerifyEmailRouteImport } from './routes/_auth/verify-email'
 import { Route as AuthResetLinkRouteImport } from './routes/_auth/reset-link'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
@@ -89,14 +92,29 @@ const PublicSearchRoute = PublicSearchRouteImport.update({
   path: '/search',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicProductsRoute = PublicProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicPostsRoute = PublicPostsRouteImport.update({
   id: '/posts',
   path: '/posts',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicNewsRoute = PublicNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicFriendLinksRoute = PublicFriendLinksRouteImport.update({
   id: '/friend-links',
   path: '/friend-links',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicAboutRoute = PublicAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
@@ -171,6 +189,7 @@ const AdminPostsEditIdRoute = AdminPostsEditIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof PublicIndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/admin/posts': typeof AdminPostsRouteRouteWithChildren
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -178,38 +197,43 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthRegisterRoute
   '/reset-link': typeof AuthResetLinkRoute
   '/verify-email': typeof AuthVerifyEmailRoute
+  '/about': typeof PublicAboutRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/news': typeof PublicNewsRoute
   '/posts': typeof PublicPostsRoute
+  '/products': typeof PublicProductsRoute
   '/search': typeof PublicSearchRoute
   '/unsubscribe': typeof PublicUnsubscribeRoute
   '/profile': typeof UserProfileRoute
   '/submit-friend-link': typeof UserSubmitFriendLinkRoute
   '/oauth/consent': typeof OauthConsentRoute
-  '/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/post/$slug': typeof PublicPostSlugRoute
-  '/admin/comments': typeof AdminCommentsIndexRoute
-  '/admin/friend-links': typeof AdminFriendLinksIndexRoute
-  '/admin/media': typeof AdminMediaIndexRoute
+  '/admin/comments/': typeof AdminCommentsIndexRoute
+  '/admin/friend-links/': typeof AdminFriendLinksIndexRoute
+  '/admin/media/': typeof AdminMediaIndexRoute
   '/admin/posts/': typeof AdminPostsIndexRoute
-  '/admin/settings': typeof AdminSettingsIndexRoute
-  '/admin/tags': typeof AdminTagsIndexRoute
+  '/admin/settings/': typeof AdminSettingsIndexRoute
+  '/admin/tags/': typeof AdminTagsIndexRoute
   '/admin/posts/edit/$id': typeof AdminPostsEditIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof PublicIndexRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/reset-link': typeof AuthResetLinkRoute
   '/verify-email': typeof AuthVerifyEmailRoute
+  '/about': typeof PublicAboutRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/news': typeof PublicNewsRoute
   '/posts': typeof PublicPostsRoute
+  '/products': typeof PublicProductsRoute
   '/search': typeof PublicSearchRoute
   '/unsubscribe': typeof PublicUnsubscribeRoute
   '/profile': typeof UserProfileRoute
   '/submit-friend-link': typeof UserSubmitFriendLinkRoute
   '/oauth/consent': typeof OauthConsentRoute
-  '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/post/$slug': typeof PublicPostSlugRoute
   '/admin/comments': typeof AdminCommentsIndexRoute
@@ -232,8 +256,11 @@ export interface FileRoutesById {
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-link': typeof AuthResetLinkRoute
   '/_auth/verify-email': typeof AuthVerifyEmailRoute
+  '/_public/about': typeof PublicAboutRoute
   '/_public/friend-links': typeof PublicFriendLinksRoute
+  '/_public/news': typeof PublicNewsRoute
   '/_public/posts': typeof PublicPostsRoute
+  '/_public/products': typeof PublicProductsRoute
   '/_public/search': typeof PublicSearchRoute
   '/_public/unsubscribe': typeof PublicUnsubscribeRoute
   '/_user/profile': typeof UserProfileRoute
@@ -253,6 +280,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/admin'
     | '/admin/posts'
     | '/forgot-password'
@@ -260,38 +288,43 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-link'
     | '/verify-email'
+    | '/about'
     | '/friend-links'
+    | '/news'
     | '/posts'
+    | '/products'
     | '/search'
     | '/unsubscribe'
     | '/profile'
     | '/submit-friend-link'
     | '/oauth/consent'
-    | '/'
     | '/admin/'
     | '/post/$slug'
-    | '/admin/comments'
-    | '/admin/friend-links'
-    | '/admin/media'
+    | '/admin/comments/'
+    | '/admin/friend-links/'
+    | '/admin/media/'
     | '/admin/posts/'
-    | '/admin/settings'
-    | '/admin/tags'
+    | '/admin/settings/'
+    | '/admin/tags/'
     | '/admin/posts/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/forgot-password'
     | '/login'
     | '/register'
     | '/reset-link'
     | '/verify-email'
+    | '/about'
     | '/friend-links'
+    | '/news'
     | '/posts'
+    | '/products'
     | '/search'
     | '/unsubscribe'
     | '/profile'
     | '/submit-friend-link'
     | '/oauth/consent'
-    | '/'
     | '/admin'
     | '/post/$slug'
     | '/admin/comments'
@@ -313,8 +346,11 @@ export interface FileRouteTypes {
     | '/_auth/register'
     | '/_auth/reset-link'
     | '/_auth/verify-email'
+    | '/_public/about'
     | '/_public/friend-links'
+    | '/_public/news'
     | '/_public/posts'
+    | '/_public/products'
     | '/_public/search'
     | '/_public/unsubscribe'
     | '/_user/profile'
@@ -352,21 +388,21 @@ declare module '@tanstack/react-router' {
     '/_user': {
       id: '/_user'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof UserRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public': {
       id: '/_public'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -419,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicSearchRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/products': {
+      id: '/_public/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof PublicProductsRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/posts': {
       id: '/_public/posts'
       path: '/posts'
@@ -426,11 +469,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicPostsRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/news': {
+      id: '/_public/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof PublicNewsRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/friend-links': {
       id: '/_public/friend-links'
       path: '/friend-links'
       fullPath: '/friend-links'
       preLoaderRoute: typeof PublicFriendLinksRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/about': {
+      id: '/_public/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicAboutRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_auth/verify-email': {
@@ -478,14 +535,14 @@ declare module '@tanstack/react-router' {
     '/admin/tags/': {
       id: '/admin/tags/'
       path: '/tags'
-      fullPath: '/admin/tags'
+      fullPath: '/admin/tags/'
       preLoaderRoute: typeof AdminTagsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/settings/': {
       id: '/admin/settings/'
       path: '/settings'
-      fullPath: '/admin/settings'
+      fullPath: '/admin/settings/'
       preLoaderRoute: typeof AdminSettingsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
@@ -499,21 +556,21 @@ declare module '@tanstack/react-router' {
     '/admin/media/': {
       id: '/admin/media/'
       path: '/media'
-      fullPath: '/admin/media'
+      fullPath: '/admin/media/'
       preLoaderRoute: typeof AdminMediaIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/friend-links/': {
       id: '/admin/friend-links/'
       path: '/friend-links'
-      fullPath: '/admin/friend-links'
+      fullPath: '/admin/friend-links/'
       preLoaderRoute: typeof AdminFriendLinksIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/comments/': {
       id: '/admin/comments/'
       path: '/comments'
-      fullPath: '/admin/comments'
+      fullPath: '/admin/comments/'
       preLoaderRoute: typeof AdminCommentsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
@@ -555,8 +612,11 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface PublicRouteRouteChildren {
+  PublicAboutRoute: typeof PublicAboutRoute
   PublicFriendLinksRoute: typeof PublicFriendLinksRoute
+  PublicNewsRoute: typeof PublicNewsRoute
   PublicPostsRoute: typeof PublicPostsRoute
+  PublicProductsRoute: typeof PublicProductsRoute
   PublicSearchRoute: typeof PublicSearchRoute
   PublicUnsubscribeRoute: typeof PublicUnsubscribeRoute
   PublicIndexRoute: typeof PublicIndexRoute
@@ -564,8 +624,11 @@ interface PublicRouteRouteChildren {
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicAboutRoute: PublicAboutRoute,
   PublicFriendLinksRoute: PublicFriendLinksRoute,
+  PublicNewsRoute: PublicNewsRoute,
   PublicPostsRoute: PublicPostsRoute,
+  PublicProductsRoute: PublicProductsRoute,
   PublicSearchRoute: PublicSearchRoute,
   PublicUnsubscribeRoute: PublicUnsubscribeRoute,
   PublicIndexRoute: PublicIndexRoute,
